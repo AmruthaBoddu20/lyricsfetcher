@@ -6,15 +6,15 @@ const admin = require('firebase-admin');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Load Firebase service account credentials
-const serviceAccount = require('./key.json'); // Make sure this path is correct
 
-// Initialize Firebase Admin SDK
+const serviceAccount = require('./key.json'); 
+
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
-// Get a Firestore instance
+
 const db = admin.firestore();
 
 app.set('view engine', 'ejs');
@@ -23,11 +23,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/login', (req, res) => {
-    res.render('login', { error: null }); // Ensure error is always defined
+    res.render('login', { error: null }); 
 });
 
 app.get('/signup', (req, res) => {
-    res.render('signup', { error: null }); // Ensure error is always defined
+    res.render('signup', { error: null }); 
 });
 
 app.post('/login', async (req, res) => {
@@ -66,7 +66,7 @@ app.post('/signup', async (req, res) => {
         if (doc.exists) {
             res.render('signup', { error: 'User already exists' });
         } else {
-            const hashedPassword = await bcrypt.hash(password, 10); // Hash the password with a salt rounds of 10
+            const hashedPassword = await bcrypt.hash(password, 10); 
             await userRef.set({ email, password: hashedPassword });
             res.redirect('/lyrics');
         }
@@ -86,7 +86,7 @@ app.post('/lyrics', async (req, res) => {
     console.log(`Received form data: Artist - ${artist}, Title - ${title}`);
 
     try {
-        // Fetch lyrics from Lyrics.ovh API
+        
         const response = await axios.get(`https://api.lyrics.ovh/v1/${artist}/${title}`);
         const lyrics = response.data.lyrics;
 
